@@ -31,7 +31,7 @@ export const DataTable = ({ data }: { data: CrUXData }) => {
           setSelectedMetric(value);
         }}
         options={Object.entries(data.record.metrics)
-          .filter(([key, value]) => Boolean(value.percentiles))
+          .filter(([, value]) => Boolean(value.percentiles))
           .map(([key]) => ({
             value: key,
             label: key.replace(/_/g, " "),
