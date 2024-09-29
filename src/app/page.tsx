@@ -19,7 +19,7 @@ export default function Home() {
     try {
       // const data = await fetchCrUXData(url);
       const data = await fetchMockCrUXData(urls);
-      setCruxData(data);
+      setCruxData(data as unknown as CrUXData[]);
     } catch (error) {
       console.error("Error fetching CrUX data:", error);
       setError(String(error));
