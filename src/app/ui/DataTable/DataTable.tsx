@@ -42,7 +42,7 @@ export const DataTable = ({ data }: { data: CrUXData }) => {
         style={{ marginBottom: 32 }}
         variant="outlined"
       >
-        <Table>
+        <Table stickyHeader>
           <TableHead>
             <TableRow>
               <TableCell>Metric</TableCell>

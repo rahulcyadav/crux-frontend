@@ -1,8 +1,7 @@
 "use client";
-import { Container, Typography } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import { useState } from "react";
 import { fetchMockCrUXData } from "./lib/fetchData";
-import styles from "./page.module.css";
 import { DataTable } from "./ui/DataTable/DataTable";
 import { UrlInput } from "./ui/URLInput/UrlInput";
 import { CrUXData } from "./lib/definitions";
@@ -28,29 +27,52 @@ export default function Home() {
   };
 
   return (
-    <div className={styles.page}>
-      <main>
-        <Container maxWidth="xl">
-          <Typography variant="h4" style={{ marginBottom: "20px" }}>
-            CrUX Report
-          </Typography>
-          <UrlInput onSubmit={handleFetchData} loading={loading} />
-          {cruxData ? (
-            cruxData.map((data) => (
-              <DataTable key={data.record.key.origin} data={data} />
-            ))
-          ) : loading ? (
-            <Typography variant="body1">Fetching...</Typography>
-          ) : error ? (
-            <Typography variant="body1" color="error">
-              {error}
+    <Container maxWidth="xl">
+      <Box
+        sx={{
+          padding: 5,
+          display: "flex",
+          flexDirection: "column",
+          height: "100vh",
+        }}
+      >
+        <Typography variant="h4" style={{ marginBottom: "20px" }}>
+          CrUX Report
+        </Typography>
+        <UrlInput onSubmit={handleFetchData} loading={loading} />
+        {cruxData ? (
+          cruxData.map((data) => (
+            <DataTable key={data.record.key.origin} data={data} />
+          ))
+        ) : (
+          <Box
+            flexGrow={1}
+            display={"flex"}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
+            <Typography variant="body1" color={error ? "error" : "textPrimary"}>
+              {loading
+                ? "Fetching..."
+                : error
+                  ? error
+                  : "Enter URL and click Fetch"}
             </Typography>
-          ) : (
-            <Typography variant="body1">Enter URL and click Fetch</Typography>
-          )}
-        </Container>
-      </main>
-      <footer className={styles.footer}>Developed by Rahul</footer>
-    </div>
+          </Box>
+        )}
+
+        <Box
+          component={"footer"}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            backgroundColor: "#eee",
+            padding: 1,
+          }}
+        >
+          Developed by Rahul
+        </Box>
+      </Box>
+    </Container>
   );
 }

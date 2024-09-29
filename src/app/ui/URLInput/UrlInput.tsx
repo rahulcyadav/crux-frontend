@@ -1,7 +1,6 @@
-import { Button, TextField } from "@mui/material";
-import { useState } from "react";
-import styles from "./UrlInput.module.css";
 import { isValidHttpUrl } from "@/app/lib/validators";
+import { Box, Button, TextField } from "@mui/material";
+import { useState } from "react";
 
 export const UrlInput = ({
   onSubmit,
@@ -16,22 +15,31 @@ export const UrlInput = ({
 
   const error = !urls.every((url) => isValidHttpUrl(url.value));
   return (
-    <form className={styles.form}>
+    <Box
+      component={"form"}
+      display={"flex"}
+      flexDirection={"column"}
+      gap={2}
+      marginBottom={2}
+    >
       {urls.map((url, index) => (
-        <div key={url.key} className={styles.row}>
-          <UrlField
-            index={index}
-            value={url.value}
-            onChange={(value) => {
-              setUrls((prev) => {
-                const temp = [...prev];
-                temp[index].value = value;
-                return temp;
-              });
-            }}
-          />
-          {index !== 0 && (
+        <Box key={url.key} display={"flex"} alignItems={"flex-start"} gap={2}>
+          <Box flexGrow={1}>
+            <UrlField
+              index={index}
+              value={url.value}
+              onChange={(value) => {
+                setUrls((prev) => {
+                  const temp = [...prev];
+                  temp[index].value = value;
+                  return temp;
+                });
+              }}
+            />
+          </Box>
+          {index !== 0 ? (
             <Button
+              variant="text"
               onClick={() => {
                 setUrls((prev) =>
                   prev.filter((prevUrl) => prevUrl.key !== url.key),
@@ -40,33 +48,37 @@ export const UrlInput = ({
             >
               remove
             </Button>
+          ) : (
+            <Box flexBasis={79}></Box>
           )}
-        </div>
+        </Box>
       ))}
 
-      <Button
-        className={styles.submitButton}
-        size="large"
-        variant="contained"
-        color="primary"
-        onClick={() =>
-          setUrls((prev) => [...prev, { key: crypto.randomUUID(), value: "" }])
-        }
-        disabled={loading}
-      >
-        add
-      </Button>
-      <Button
-        className={styles.submitButton}
-        size="large"
-        variant="contained"
-        color="primary"
-        onClick={() => onSubmit(urls.map((url) => url.value))}
-        disabled={loading || Boolean(error)}
-      >
-        {loading ? "Loading..." : "Fetch"}
-      </Button>
-    </form>
+      <Box display={"flex"} gap={2} justifyContent={"flex-end"}>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={() =>
+            setUrls((prev) => [
+              ...prev,
+              { key: crypto.randomUUID(), value: "" },
+            ])
+          }
+          disabled={loading}
+        >
+          add
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => onSubmit(urls.map((url) => url.value))}
+          disabled={loading || Boolean(error)}
+        >
+          {loading ? "Loading..." : "Fetch"}
+        </Button>
+        <Box flexBasis={79}></Box>
+      </Box>
+    </Box>
   );
 };
 
@@ -93,14 +105,14 @@ const UrlField = ({
   return (
     <TextField
       name={`url[${index}]`}
-      size="medium"
+      size="small"
       label="Enter URL"
       variant="outlined"
       fullWidth
       value={value}
       onChange={(e) => onChange(e.target.value)}
       error={Boolean(error)}
-      helperText={error}
+      helperText={error || " "}
       onBlur={onBlur}
     />
   );
